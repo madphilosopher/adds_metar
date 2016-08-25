@@ -69,6 +69,8 @@ def fetch_multiple(station_list=list(["CYEG", "CYOJ"])):
             s_metar["temp_f"] = float(s_metar["temp_c"])*9.0/5.0 + 32.0
         if s_metar.has_key("wind_speed_kt"):
             s_metar["wind_speed_mph"] = float(s_metar["wind_speed_kt"]) * 1.150779
+        if s_metar.has_key("sea_level_pressure_mb"):
+            s_metar["sea_level_pressure_kpa"] = float(s_metar["sea_level_pressure_mb"]) / 10.0
 
         # store the entire station metar dictionary in a dictionary
         out_dict[s_metar["station_id"]] = s_metar
@@ -104,6 +106,7 @@ if __name__ == '__main__':
         print "Wind Speed:        ", d["wind_speed_kt"], "KT"
         print "Wind Direction:    ", d["wind_dir_compass"], "(", d["wind_dir_degrees"], ")"
         print "Sea Level Pressure:", d["sea_level_pressure_mb"], "mb"
+        print "Sea Level Pressure:", d["sea_level_pressure_kpa"], "kPa"
 
 
 
