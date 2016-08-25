@@ -15,7 +15,6 @@ __author__ = 'Darren Paul Griffith <http://madphilosopher.ca/>'
 
 from xml.etree import ElementTree
 import urllib2
-import pprint
 
 
 DEBUG = False
@@ -63,8 +62,13 @@ def fetch_multiple(station_list=list(["CYEG", "CYOJ"])):
             # store each tag in a dictionary for that station
             s_metar[x.tag] = x.text
 
+        # convert some keys
         if s_metar.has_key("wind_dir_degrees"):
             s_metar["wind_dir_compass"] = degrees_to_cardinal(s_metar["wind_dir_degrees"])
+        if s_metar.has_key("temp_c"):
+            s_metar["temp_f"] = float(s_metar["temp_c"])*9.0/5.0 + 32.0
+        if s_metar.has_key("wind_speed_kt"):
+            s_metar["wind_speed_mph"] = float(s_metar["wind_speed_kt"]) * 1.150779
 
         # store the entire station metar dictionary in a dictionary
         out_dict[s_metar["station_id"]] = s_metar
@@ -85,9 +89,14 @@ def fetch(station="CYEG"):
 
 if __name__ == '__main__':
 
+    if DEBUG:
+        import pprint
+        pprint.pprint(fetch("CYEG"))
+        print
 
     d = fetch("CYEG")
     if d:
+        if DEBUG: print
         print "Observation:       ", d["observation_time"]
         print "Code:              ", d["metar_type"], d["raw_text"]
         print "Temperature (C):   ", d["temp_c"]
