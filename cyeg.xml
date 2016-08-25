@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XML-Schema-instance" version="1.2" xsi:noNamespaceSchemaLocation="http://aviationweather.gov/adds/schema/metar1_2.xsd">
+  <request_index>134636687</request_index>
+  <data_source name="metars" />
+  <request type="retrieve" />
+  <errors />
+  <warnings />
+  <time_taken_ms>13</time_taken_ms>
+  <data num_results="1">
+    <METAR>
+      <raw_text>CYEG 250020Z 00000KT 15SM FEW060 SCT082 BKN110 BKN260 17/13 A3024 RMK CU1ACC4AC2CI1 CU TR SH E-S SLP252 DENSITY ALT 2800FT</raw_text>
+      <station_id>CYEG</station_id>
+      <observation_time>2016-08-25T00:20:00Z</observation_time>
+      <latitude>53.28</latitude>
+      <longitude>-113.57</longitude>
+      <temp_c>17.0</temp_c>
+      <dewpoint_c>13.0</dewpoint_c>
+      <wind_dir_degrees>0</wind_dir_degrees>
+      <wind_speed_kt>0</wind_speed_kt>
+      <visibility_statute_mi>15.0</visibility_statute_mi>
+      <altim_in_hg>30.239174</altim_in_hg>
+      <sea_level_pressure_mb>1025.2</sea_level_pressure_mb>
+      <sky_condition sky_cover="FEW" cloud_base_ft_agl="6000" />
+      <sky_condition sky_cover="SCT" cloud_base_ft_agl="8200" />
+      <sky_condition sky_cover="BKN" cloud_base_ft_agl="11000" />
+      <sky_condition sky_cover="BKN" cloud_base_ft_agl="26000" />
+      <flight_category>VFR</flight_category>
+      <metar_type>SPECI</metar_type>
+      <elevation_m>723.0</elevation_m>
+    </METAR>
+  </data>
+</response>
+
