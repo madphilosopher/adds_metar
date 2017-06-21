@@ -104,6 +104,7 @@ if __name__ == '__main__':
         print "Temperature (C):   ", d["temp_c"]
         print "Dew Point (C):     ", d["dewpoint_c"]
         print "Wind Speed:        ", d["wind_speed_kt"], "KT"
+        if d.has_key("wind_gust_kt"): print "Wind Gust:         ", d["wind_gust_kt"], "KT"
         print "Wind Direction:    ", d["wind_dir_compass"], "(", d["wind_dir_degrees"], ")"
         print "Sea Level Pressure:", d["sea_level_pressure_mb"], "mb"
         print "Sea Level Pressure:", d["sea_level_pressure_kpa"], "kPa"
