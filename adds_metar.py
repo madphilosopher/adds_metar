@@ -91,12 +91,19 @@ def fetch(station="CYEG"):
 
 if __name__ == '__main__':
 
+    import sys
+
+    if len(sys.argv) == 2:
+        station = sys.argv[1]
+    else:
+        station = "CYEG"
+
     if DEBUG:
         import pprint
         pprint.pprint(fetch("CYEG"))
         print
 
-    d = fetch("CYEG")
+    d = fetch(station)
     if d:
         if DEBUG: print
         print "Observation:       ", d["observation_time"]
