@@ -14,7 +14,7 @@ __author__ = 'Darren Paul Griffith <http://madphilosopher.ca/>'
 
 
 from xml.etree import ElementTree
-import urllib2
+import requests
 
 
 DEBUG = False
@@ -48,11 +48,16 @@ def fetch_multiple(station_list=list(["CYEG", "CYOJ"])):
 
     # fetch the url and parse the xml data
     url = URL + stations
+    tree = None
     if DEBUG:
         f = open(TESTFILE, 'rt')
+        tree = ElementTree.parse(f)
     else:
-        f = urllib2.urlopen(url)
-    tree = ElementTree.parse(f)
+        rq = requests.get(url, timeout=16.0)
+        rq.raise_for_status()
+        if rq.status_code == requests.codes.ok:
+            intext = rq.text
+            tree = ElementTree.fromstring(intext)
 
     # start walking the tree
     out_dict = {}
@@ -94,7 +99,7 @@ if __name__ == '__main__':
     import sys
 
     if len(sys.argv) == 2:
-        station = sys.argv[1]
+        station = sys.argv[1].upper()
     else:
         station = "CYEG"
 
