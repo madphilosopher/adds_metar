@@ -15,6 +15,8 @@ __author__ = 'Darren Paul Griffith <http://madphilosopher.ca/>'
 
 from xml.etree import ElementTree
 import requests
+import time
+import random
 
 
 DEBUG = False
@@ -53,11 +55,19 @@ def fetch_multiple(station_list=list(["CYEG", "CYOJ"])):
         f = open(TESTFILE, 'rt')
         tree = ElementTree.parse(f)
     else:
-        rq = requests.get(url, timeout=16.0)
-        rq.raise_for_status()
-        if rq.status_code == requests.codes.ok:
-            intext = rq.text
-            tree = ElementTree.fromstring(intext)
+        attempts = 0
+        success = False
+        while attempts < 3 and not success:
+            try:
+                rq = requests.get(url, timeout=16.0)
+                rq.raise_for_status()
+                if rq.status_code == requests.codes.ok:
+                    intext = rq.text
+                    tree = ElementTree.fromstring(intext)
+                success = True
+            except:
+                attempts = attempts + 1
+                time.sleep(random.uniform(3,60))
 
     # start walking the tree
     out_dict = {}
