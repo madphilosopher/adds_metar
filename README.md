@@ -130,7 +130,7 @@ Sea Level Pressure: 101.76 kPa
 
 ## Compatibility
 
- * Tested under Python 2.7.12
+ * Tested under Python 2.7.12, 2.7.17
  * Designed for the ADDS Text Data Server (TDS) ver 1.3
 
 
