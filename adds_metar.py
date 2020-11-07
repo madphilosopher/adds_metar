@@ -10,7 +10,7 @@ URL: https://aviationweather.gov/adds/dataserver_current/httpparam?datasource=me
 __RCS__ = '$Id$'
 __version__ = '$Revision:$'
 __initialdate__ = 'August 2016'
-__author__ = 'Darren Paul Griffith <http://madphilosopher.ca/>'
+__author__ = 'Darren Paul Griffith <https://madphilosopher.ca/>'
 
 
 from xml.etree import ElementTree
@@ -96,10 +96,8 @@ def fetch_multiple(station_list=list(["CYEG", "CYOJ"])):
 def fetch(station="CYEG"):
     """Fetch the metar for a single station ID."""
 
-    #station_list = [station]
-    #d = fetch_multiple(station_list)
     d = fetch_multiple([station])
-    return d[station]
+    return d.get(station) # returns None if d has no such key
 
 
 
@@ -115,7 +113,7 @@ if __name__ == '__main__':
 
     if DEBUG:
         import pprint
-        pprint.pprint(fetch("CYEG"))
+        pprint.pprint(fetch(station))
         print
 
     d = fetch(station)
