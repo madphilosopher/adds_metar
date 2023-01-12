@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 
 def degrees_to_cardinal(degrees):
@@ -19,4 +19,4 @@ if __name__ == '__main__':
 
 
     for i in range(365):
-        print i, degrees_to_cardinal(i)
+        print(i, degrees_to_cardinal(i))

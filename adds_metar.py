@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Fetches metars from the ADDS Text Data Server.
 
 Documentation: https://aviationweather.gov/dataserver
@@ -46,7 +46,7 @@ def fetch_multiple(station_list=list(["CYEG", "CYOJ"])):
 
     # convert list to space-separated string
     stations = "%20".join(station_list)
-    if DEBUG: print "stations:", stations
+    if DEBUG: print("stations:", stations)
 
     # fetch the url and parse the xml data
     url = URL + stations
@@ -78,13 +78,13 @@ def fetch_multiple(station_list=list(["CYEG", "CYOJ"])):
             s_metar[x.tag] = x.text
 
         # convert some keys
-        if s_metar.has_key("wind_dir_degrees"):
+        if "wind_dir_degrees" in s_metar:
             s_metar["wind_dir_compass"] = degrees_to_cardinal(s_metar["wind_dir_degrees"])
-        if s_metar.has_key("temp_c"):
+        if "temp_c" in s_metar:
             s_metar["temp_f"] = float(s_metar["temp_c"])*9.0/5.0 + 32.0
-        if s_metar.has_key("wind_speed_kt"):
+        if "wind_speed_kt" in s_metar:
             s_metar["wind_speed_mph"] = float(s_metar["wind_speed_kt"]) * 1.150779
-        if s_metar.has_key("sea_level_pressure_mb"):
+        if "sea_level_pressure_mb" in s_metar:
             s_metar["sea_level_pressure_kpa"] = float(s_metar["sea_level_pressure_mb"]) / 10.0
 
         # store the entire station metar dictionary in a dictionary
@@ -114,20 +114,20 @@ if __name__ == '__main__':
     if DEBUG:
         import pprint
         pprint.pprint(fetch(station))
-        print
+        print()
 
     d = fetch(station)
     if d:
-        if DEBUG: print
-        print "Observation:       ", d["observation_time"]
-        print "Code:              ", d["metar_type"], d["raw_text"]
-        print "Temperature (C):   ", d["temp_c"]
-        print "Dew Point (C):     ", d["dewpoint_c"]
-        print "Wind Speed:        ", d["wind_speed_kt"], "KT"
-        if d.has_key("wind_gust_kt"): print "Wind Gust:         ", d["wind_gust_kt"], "KT"
-        print "Wind Direction:    ", d["wind_dir_compass"], "(", d["wind_dir_degrees"], ")"
-        print "Sea Level Pressure:", d["sea_level_pressure_mb"], "mb"
-        print "Sea Level Pressure:", d["sea_level_pressure_kpa"], "kPa"
+        if DEBUG: print()
+        print("Observation:       ", d["observation_time"])
+        print("Code:              ", d["metar_type"], d["raw_text"])
+        print("Temperature (C):   ", d["temp_c"])
+        print("Dew Point (C):     ", d["dewpoint_c"])
+        print("Wind Speed:        ", d["wind_speed_kt"], "KT")
+        if "wind_gust_kt" in d: print("Wind Gust:         ", d["wind_gust_kt"], "KT")
+        print("Wind Direction:    ", d["wind_dir_compass"], "(", d["wind_dir_degrees"], ")")
+        print("Sea Level Pressure:", d["sea_level_pressure_mb"], "mb")
+        print("Sea Level Pressure:", d["sea_level_pressure_kpa"], "kPa")
 
 
 
