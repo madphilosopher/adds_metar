@@ -1,5 +1,5 @@
 # ADDS METAR
-This Python 2 module fetches aviation weather METARs from the ADDS Text Data Server.
+This Python module fetches aviation weather METARs from the ADDS Text Data Server.
 
 The [ADDS Text Data Server](https://aviationweather.gov/dataserver) is
 a subservice of the Aviation Weather Centre, and provides METAR data
@@ -40,7 +40,7 @@ the response from the ADDS Text Data Server.
 ### Command Line
 
 ```sh
-$ python adds_metar.py CYEG
+$ python3 adds_metar.py CYEG
 
 Observation:        2020-02-20T18:00:00Z
 Code:               METAR CYEG 201800Z 24004KT 20SM BKN220 M07/M15 A2991 RMK CI5 SLP176
