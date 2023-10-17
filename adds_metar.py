@@ -3,7 +3,7 @@
 
 Documentation: https://aviationweather.gov/dataserver
 
-URL: https://aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requestType=retrieve&format=xml&mostRecentForEachStation=constraint&hoursBeforeNow=1.5&stationString=CYEG
+URL: https://aviationweather.gov/cgi-bin/data/dataserver.php?requestType=retrieve&dataSource=metars&hoursBeforeNow=1.5&format=xml&mostRecentForEachStation=constraint&stationString=CYEG
 
 """
 
@@ -23,7 +23,7 @@ DEBUG = False
 TESTFILE = "cyeg.xml"
 TESTFILE = "cyeg_cyoj.xml"
 
-URL = 'https://aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requestType=retrieve&format=xml&mostRecentForEachStation=constraint&hoursBeforeNow=1.5&stationString='
+URL = 'https://aviationweather.gov/cgi-bin/data/dataserver.php?requestType=retrieve&dataSource=metars&hoursBeforeNow=1.5&format=xml&mostRecentForEachStation=constraint&stationString='
 
 
 def degrees_to_cardinal(degrees):
@@ -126,8 +126,7 @@ if __name__ == '__main__':
         print("Wind Speed:        ", d["wind_speed_kt"], "KT")
         if "wind_gust_kt" in d: print("Wind Gust:         ", d["wind_gust_kt"], "KT")
         print("Wind Direction:    ", d["wind_dir_compass"], "(", d["wind_dir_degrees"], ")")
-        print("Sea Level Pressure:", d["sea_level_pressure_mb"], "mb")
-        print("Sea Level Pressure:", d["sea_level_pressure_kpa"], "kPa")
+        print("Sea Level Pressure:", d["sea_level_pressure_mb"], "hPa")
 
 
 
