@@ -31,7 +31,10 @@ def degrees_to_cardinal(degrees):
 
     CARDINALS = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
 
-    degrees = float(degrees)
+    if degrees == "VRB":
+        degrees = 0.0
+    else:
+        degrees = float(degrees)
 
     if degrees < 0: return None
 
