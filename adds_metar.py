@@ -1,29 +1,45 @@
 #!/usr/bin/env python3
 """Fetches metars from the ADDS Text Data Server.
 
-Documentation: https://aviationweather.gov/dataserver
+    It is now called the "Aviation Weather Center Data API".
 
-URL: https://aviationweather.gov/cgi-bin/data/dataserver.php?requestType=retrieve&dataSource=metars&hoursBeforeNow=1.5&format=xml&mostRecentForEachStation=constraint&stationString=CYEG
+    Documentation: https://aviationweather.gov/data/api/#schema
+
+    URL = 'https://aviationweather.gov/api/data/metar?format=xml&ids=CYEG'
+
+    Some other options:
+     * format=raw
+     * format=json
+     * format=xml
+     * hours=1.5
+
+    The cgi-bin API URL was deprecated around September 2025, so our v1.1 reflects the change to a new URL. 
+
+    Note: I've notice two bugs (2025-09-25):
+     * xml: dewpoint is missing if dewpoint is 00 in the METAR
+     * json: gives altimeter setting as hPa for Canadian and North American stations
 
 """
 
-__RCS__ = '$Id$'
-__version__ = '$Revision:$'
+__version__     = 'v1.1'
 __initialdate__ = 'August 2016'
-__author__ = 'Darren Paul Griffith <https://madphilosopher.ca/>'
+__author__      = 'Darren Paul Griffith <https://madphilosopher.ca/>'
 
 
 from xml.etree import ElementTree
 import requests
 import time
 import random
+import sys
 
 
-DEBUG = False
-TESTFILE = "cyeg.xml"
-TESTFILE = "cyeg_cyoj.xml"
+DEBUG         = False
+TESTFILE      = "cyeg.xml"
+TESTFILE      = "cyeg_cyoj.xml"
+degree_symbol = chr(176)
+degree_symbol = u"\N{DEGREE SIGN}"
 
-URL = 'https://aviationweather.gov/cgi-bin/data/dataserver.php?requestType=retrieve&dataSource=metars&hoursBeforeNow=1.5&format=xml&mostRecentForEachStation=constraint&stationString='
+URL = 'https://aviationweather.gov/api/data/metar?format=xml&ids='
 
 
 def degrees_to_cardinal(degrees):
@@ -44,15 +60,19 @@ def degrees_to_cardinal(degrees):
 
 
 
-def fetch_multiple(station_list=list(["CYEG", "CYOJ"])):
+def fetch_multiple(station_list):
     """Fetch the metars for a list of station IDs."""
 
     # convert list to space-separated string
-    stations = "%20".join(station_list)
+    stations = "%2C".join(station_list)
     if DEBUG: print("stations:", stations)
 
     # fetch the url and parse the xml data
     url = URL + stations
+    if DEBUG:
+        # print out an equivalent curl command-line
+        print(f"curl -s '{url}'")
+
     tree = None
     if DEBUG:
         f = open(TESTFILE, 'rt')
@@ -96,40 +116,60 @@ def fetch_multiple(station_list=list(["CYEG", "CYOJ"])):
     return out_dict
 
 
-def fetch(station="CYEG"):
+def fetch(station):
     """Fetch the metar for a single station ID."""
 
     d = fetch_multiple([station])
     return d.get(station) # returns None if d has no such key
 
 
+def test():
+    '''Perform single and multiple station fetch, printing dictionary.'''
+
+    from pprint import pprint
+    WIDTH   = 150
+
+    # single fetch
+    print("=" * WIDTH)
+    d = fetch('CYEG')
+    if d: pprint(d, width=WIDTH)
+    print()
+
+    # multiple fetch
+    print("=" * WIDTH)
+    m = fetch_multiple(['CZVL','CYEG'])
+    if m: pprint(m, width=WIDTH)
+    print()
 
 
 if __name__ == '__main__':
 
-    import sys
 
     if len(sys.argv) == 2:
         station = sys.argv[1].upper()
     else:
         station = "CYEG"
 
-    if DEBUG:
-        import pprint
-        pprint.pprint(fetch(station))
+    d = fetch(station)
+    if d and DEBUG:
+        from pprint import pprint
+        print()
+        pprint(d, width=150)
         print()
 
-    d = fetch(station)
     if d:
-        if DEBUG: print()
-        print("Observation:       ", d["observation_time"])
-        print("Code:              ", d["metar_type"], d["raw_text"])
-        print("Temperature (C):   ", d["temp_c"])
-        print("Dew Point (C):     ", d["dewpoint_c"])
-        print("Wind Speed:        ", d["wind_speed_kt"], "KT")
-        if "wind_gust_kt" in d: print("Wind Gust:         ", d["wind_gust_kt"], "KT")
-        print("Wind Direction:    ", d["wind_dir_compass"], "(", d["wind_dir_degrees"], ")")
-        print("Sea Level Pressure:", d["sea_level_pressure_mb"], "hPa")
+        temp_c     = d.get("temp_c")       # will be None if missing
+        dewpoint_c = d.get("dewpoint_c")   # will be None if missing
 
+        print(f'Code:               {d["raw_text"]}')
+        print(f'Observation:        {d["observation_time"]}')
+        print(f'Temperature:        {temp_c}{degree_symbol}C')
+        print(f'Dew Point:          {dewpoint_c}{degree_symbol}C')
+        print(f'Wind Direction:     {d["wind_dir_compass"]} ({d["wind_dir_degrees"]}{degree_symbol})')
+        print(f'Wind Speed:         {d["wind_speed_kt"]} KT')
+        if "wind_gust_kt" in d:
+            print(f'Wind Gust:         {d["wind_gust_kt"]} KT')
+        print(f'Sea Level Pressure: {d["sea_level_pressure_mb"]} hPa')
+        print(f'Altimeter Setting:  {d["altim_in_hg"]}')
 
 
